@@ -1,5 +1,6 @@
 /// <reference types="cypress" />
 import { faker } from "@faker-js/faker";
+import compraPage from "../support/page_objects/compra.page";
 
 context('Exercicio - Testes End-to-end - Fluxo de pedido', () => {
     /*  Como cliente 
@@ -11,33 +12,21 @@ context('Exercicio - Testes End-to-end - Fluxo de pedido', () => {
         E validando minha compra ao final */
 
     beforeEach(() => {
-        cy.visit('minha-conta')
+        compraPage.loginConta()
+    });
 
+    afterEach(() => {
+        cy.screenshot()
     });
 
     it('Deve fazer um pedido na loja Ebac Shop de ponta a ponta', () => {
         //TODO: Coloque todo o fluxo de teste aqui, considerando as boas práticas e otimizações
-        cy.fixture('perfil').then((dados) => {
-            cy.login(dados.usuario, dados.senha, { log: false })
-        })
+        
         cy.get('#primary-menu > .menu-item-629 > a').click()
-        cy.get('.product-block ').eq(0).click()
-        cy.get('.button-variable-item-L').click()
-        cy.get('.button-variable-item-Blue').click()
-        cy.get('.single_add_to_cart_button').click()
-        cy.get('#primary-menu > .menu-item-629 > a').click()
-        cy.get('.product-block ').eq(2).click()
-        cy.get('.button-variable-item-36').click()
-        cy.get('.button-variable-item-Blue').click()
-        cy.get('.single_add_to_cart_button').click()
-        cy.get('#primary-menu > .menu-item-629 > a').click()
-        cy.get('.product-block ').eq(4).click()
-        cy.get('.button-variable-item-36').click()
-        cy.get(':nth-child(2) > .value > .variable-items-wrapper > .variable-item').click()
-        cy.get('.single_add_to_cart_button').click()
-        cy.get('#primary-menu > .menu-item-629 > a').click()
-        cy.get('.product-block ').eq(6).click()
-        cy.get('.button-variable-item-L').click()
+        compraPage.addProduto1()
+        compraPage.addProduto2()
+        compraPage.addProduto3()
+        compraPage.addProduto4()
         cy.get(':nth-child(2) > .value > .variable-items-wrapper > .variable-item').click()
         cy.get('.single_add_to_cart_button').click()
         cy.get('.woocommerce-message > .button').click()
@@ -49,8 +38,7 @@ context('Exercicio - Testes End-to-end - Fluxo de pedido', () => {
         cy.get('#terms').click()
         cy.get('#place_order').click()
         cy.get('.page-title').should('exist')
-
+     
     });
-
 
 })
